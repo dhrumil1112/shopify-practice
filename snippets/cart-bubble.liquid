@@ -33,7 +33,9 @@
       aria-hidden="true"
       data-testid="cart-bubble"
     >
-      {%- if limit == blank or cart.item_count < limit %}
+      {%- if cart.item_count > 99 %}
+        99+
+      {%- else %}
         {{- cart.item_count -}}
       {%- endif -%}
     </span>

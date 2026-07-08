@@ -22,7 +22,7 @@ class CartIcon extends Component {
   }
 
   set currentCartCount(value) {
-    this.refs.cartBubbleCount.textContent = value < 100 ? String(value) : '';
+    this.refs.cartBubbleCount.textContent = value < 100 ? String(value) : '99+';
   }
 
   connectedCallback() {
