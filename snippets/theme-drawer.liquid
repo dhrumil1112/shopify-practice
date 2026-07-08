@@ -27,11 +27,6 @@
     var drawerIds = (sessionStorage.getItem('theme-drawer-open') || '').split(',').filter(Boolean);
     if (!drawerIds.length) return;
 
-    // Only restore on wide viewports (squeeze mode). On narrow viewports the
-    // drawer is a modal overlay — let it start closed after navigation rather
-    // than re-opening a fullscreen dialog the user may have left behind.
-    if (!window.matchMedia('(min-width: 990px)').matches) return;
-
     var dialogs = [];
     for (var i = 0; i < drawerIds.length; i++) {
       var drawer = document.getElementById(drawerIds[i]);
@@ -39,9 +34,7 @@
 
       drawer.setAttribute('open', '');
 
-      // Set [open] directly so the CSS slide-in applies without triggering
-      // the browser's dialog focusing steps — on wide viewports the drawer is
-      // a sidebar, not a modal, so focus should stay where it is.
+      // Set [open] directly on the dialog element for the modal state.
       // The instant class suppresses the slide-in transition for the initial restore.
       // Set --drawer-stack-order so z-index layering matches the original order.
       drawer.style.setProperty('--drawer-stack-order', String(i + 1));
@@ -58,19 +51,9 @@
       drawer.dispatchEvent(new CustomEvent('theme-drawer:restoring'));
     }
 
-    // Apply squeeze immediately, bypassing the margin transition.
-    // Only squeeze if at least one drawer was actually restored — saved
-    // drawer IDs may not exist on every page (e.g. cart-drawer on /cart).
-    var pageWrapper = document.querySelector('.page-wrapper');
-    if (pageWrapper && dialogs.length > 0) {
-      pageWrapper.style.transition = 'none';
-      pageWrapper.classList.add('page-wrapper--drawer-open');
-    }
-
     // Re-enable transitions after one paint so the instant state is rendered first.
     requestAnimationFrame(function () {
       requestAnimationFrame(function () {
-        if (pageWrapper) pageWrapper.style.transition = '';
         for (var j = 0; j < dialogs.length; j++) {
           dialogs[j].classList.remove('theme-drawer__dialog-instant');
         }
@@ -82,29 +65,6 @@
 <script
   type="module"
 >
-  const pageWrapper = document.querySelector('.page-wrapper');
-  const squeezeQuery = window.matchMedia('(min-width: 990px)');
-
-  // ── Squeeze coordination ──
-  // Listens to all drawers. Only squeezes on wide viewports.
-  document.addEventListener('theme-drawer:open', () => {
-    if (squeezeQuery.matches) {
-      pageWrapper?.classList.add('page-wrapper--drawer-open');
-    }
-  });
-
-  document.addEventListener('theme-drawer:close', () => {
-    const openDrawer = document.querySelector('theme-drawer[open]');
-    if (!openDrawer) {
-      pageWrapper?.classList.remove('page-wrapper--drawer-open');
-    }
-  });
-
-  squeezeQuery.addEventListener('change', () => {
-    const openDrawer = document.querySelector('theme-drawer[open]');
-    pageWrapper?.classList.toggle('page-wrapper--drawer-open', Boolean(openDrawer) && squeezeQuery.matches);
-  });
-
   // ── State persistence ──
   // Store open drawer IDs sorted by their visual stack order so
   // the restore script can recreate the same z-index layering.

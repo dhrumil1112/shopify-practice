@@ -1,7 +1,8 @@
 {%- doc -%}
   @param [limit] - {number}
+  @param [show_full_count] - {boolean}
 
-  The maximum number of items to display. Anything above shows as "99+".
+  The maximum number of items to display. Anything above shows as "99+" unless full count is requested.
 
   Colors: reads --cart-bubble-background / --cart-bubble-text from an ancestor. Falls back to a contrasting pair
   computed from the palette foreground when unset.
@@ -17,7 +18,8 @@
   class="cart-bubble{% if cart == empty %} visually-hidden{% endif %}"
   style="--cart-bubble-background-fallback: {{ bubble_bg_fallback }}; --cart-bubble-text-fallback: {{ bubble_text_fallback }};"
   {% assign item_count = cart.item_count %}
-  {% if item_count <= 99 %}
+  {% assign show_full_count = show_full_count | default: false %}
+  {% if item_count <= 99 or show_full_count %}
     data-maintain-ratio
   {% endif %}
 >
@@ -33,7 +35,9 @@
       aria-hidden="true"
       data-testid="cart-bubble"
     >
-      {%- if cart.item_count > 99 %}
+      {%- if show_full_count %}
+        {{- item_count -}}
+      {%- elsif cart.item_count > 99 %}
         99+
       {%- else %}
         {{- cart.item_count -}}

@@ -25,10 +25,10 @@
       assign menu_class = menu_class | append: ' menu--dividers'
     endif
     assign should_disable_on_mobile = false
-    assign should_open_by_default_on_mobile = false
-    if show_as_accordion == false
-      assign should_disable_on_mobile = true
-      assign should_open_by_default_on_mobile = true
+    assign should_open_by_default_on_mobile = true
+    if show_as_accordion == true and block_settings.open_by_default == false
+      assign should_disable_on_mobile = false
+      assign should_open_by_default_on_mobile = false
     endif
   -%}
   {% capture menu_accordion_children %}
@@ -43,7 +43,7 @@
         --spacing--size: {{ block_settings.menu_spacing }}px;
         {% render 'spacing-style', settings: block_settings %}
       "
-      {% if show_as_accordion == false %}
+      {% if show_as_accordion == true and block_settings.open_by_default == false %}
         open
       {% endif %}
       {{ block.shopify_attributes }}
@@ -185,6 +185,12 @@
       "type": "checkbox",
       "id": "show_as_accordion",
       "label": "t:settings.show_as_accordion",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "open_by_default",
+      "label": "t:settings.open_row_by_default",
       "default": false
     },
     {

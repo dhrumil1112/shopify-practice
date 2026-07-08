@@ -28,7 +28,7 @@
       {{ 'content.your_cart_is_empty' | t }}
     {%- else -%}
       {{ block_settings.title }}
-      {%- if block_settings.show_count -%}{% render 'cart-bubble' %}{%- endif -%}
+      {%- if block_settings.show_count -%}{% render 'cart-bubble', show_full_count: true %}{%- endif -%}
     {%- endif -%}
   </h1>
 </div>
