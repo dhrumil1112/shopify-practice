@@ -181,11 +181,9 @@
 {% render 'accordion-custom-component',
   children: accordion_children,
   class: 'facets__item',
-  open: is_vertical,
-  open_by_default_on_desktop: is_vertical,
-  open_by_default_on_mobile: is_vertical,
   disable_animation_on_desktop: is_horizontal,
-  close_with_escape: is_horizontal
+  close_with_escape: is_horizontal,
+  accordion_group: section.id
 %}
 
 {% stylesheet %}

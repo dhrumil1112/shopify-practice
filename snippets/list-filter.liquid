@@ -37,7 +37,7 @@
 {% capture accordion_children %}
   <details
     id="Facet-Details-{{ sectionId }}-{{ filter.param_name | escape | replace: '.', '-' }}"
-    class="facets__panel"
+    class="facets__panel vertcal"
     {% if filter_style == 'horizontal' %}
       data-auto-close-details="desktop"
     {% endif %}
@@ -427,12 +427,10 @@
 {% render 'accordion-custom-component',
   children: accordion_children,
   class: 'facets__item',
-  open: is_vertical,
-  open_by_default_on_desktop: is_vertical,
-  open_by_default_on_mobile: is_vertical,
   disable_animation_on_desktop: is_horizontal,
   close_with_escape: is_horizontal,
-  data_filter_param_name: filter_param_name
+  data_filter_param_name: filter_param_name,
+  accordion_group: section.id
 %}
 
 {% stylesheet %}

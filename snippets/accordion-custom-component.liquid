@@ -13,6 +13,7 @@
   @param {boolean} [disable_animation_on_desktop] - Disables animation on desktop (for horizontal filters)
   @param {boolean} [close_with_escape] - Enables closing with escape key
   @param {string} [data_filter_param_name] - Filter param name for facet identification
+  @param {string} [accordion_group] - Named group for scoped single-open behaviour (only accordions sharing the same group name will close each other)
 
   @example
   {% capture accordion_content %}
@@ -54,6 +55,9 @@
   {% endif %}
   {% if data_filter_param_name %}
     data-filter-param-name="{{ data_filter_param_name }}"
+  {% endif %}
+  {% if accordion_group %}
+    data-accordion-group="{{ accordion_group }}"
   {% endif %}
 >
   {{ children }}

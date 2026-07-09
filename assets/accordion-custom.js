@@ -75,15 +75,18 @@ class AccordionCustom extends HTMLElement {
 
   #closeOtherAccordions() {
     const group = this.dataset.accordionGroup || null;
-    const allAccordions = document.querySelectorAll('accordion-custom');
+
+    // Single-open behaviour is opt-in: only run when this accordion
+    // belongs to an explicit named group.  Accordions without a group
+    // (e.g. Footer Menu, cart, filters) are always independent.
+    if (group === null) return;
+
+    const allAccordions = document.querySelectorAll(`accordion-custom[data-accordion-group="${group}"]`);
 
     allAccordions.forEach((other) => {
       if (other === this) return;
 
-      // If group is defined, only close others with the same group.
-      if (group !== null && other.dataset.accordionGroup !== group) return;
-
-      // Close the other accordion.
+      // Close every sibling in the same named group.
       other.details.open = false;
     });
   }

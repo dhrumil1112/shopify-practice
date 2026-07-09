@@ -43,7 +43,8 @@
   {% render 'accordion-custom-component',
     children: accordion_row_children,
     open_by_default_on_desktop: block_settings.open_by_default,
-    open_by_default_on_mobile: block_settings.open_by_default
+    open_by_default_on_mobile: block_settings.open_by_default,
+    accordion_group: section.id
   %}
 
 {% endif %}
