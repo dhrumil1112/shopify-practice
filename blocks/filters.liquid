@@ -237,6 +237,91 @@
               {% endcapture %}
 
               <div class="facets__filters-wrapper">
+                {% assign sub_collections = collection.metafields.custom.child_categories.value %}
+                  {% assign has_child_products = false %}
+
+                  {% for sub_collection in sub_collections %}
+                  {% if sub_collection.products_count > 0 %}
+                    {% assign has_child_products = true %}
+                    {% break %}
+                  {% endif %}
+                  {% endfor %}
+
+                {% if sub_collections != blank and has_child_products %}
+                  <accordion-custom class="facets__item" data-accordion-group="{{ section.id }}">
+                    <details id="Facet-Details-{{ block.id }}" class="facets__panel">
+                      <summary class="facets__summary">
+                        <span class="facets__label">Categories</span>
+                        <div class="facets__status-wrapper">
+                          <facet-status-component class="facets__status" facet-type="list" data-filter-style="vertical">
+                            <span class="hide-when-empty" ref="facetStatus"></span>
+                          </facet-status-component>
+                          <span class="svg-wrapper icon-caret icon-animated">
+                            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M11 5.5L7 9.5L3 5.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                          </span>
+                        </div>
+                      </summary>
+                      <floating-panel-component class="facets__inputs facets__panel-content details-content" style="top: 40px;">
+                        <facet-inputs-component>
+                          {% assign render_show_more = false %}
+                          {% assign initial_visible_values = 10 %}
+                          {% assign sub_collections_with_products = 0 %}
+                          {% for sub_collection in sub_collections %}
+                            {% if sub_collection.products_count > 0 %}
+                              {% assign sub_collections_with_products = sub_collections_with_products | plus: 1 %}
+                            {% endif %}
+                          {% endfor %}
+                          
+                          {% if sub_collections_with_products > initial_visible_values %}
+                            {% assign render_show_more = true %}
+                            <show-more-component class="show-more" data-expanded="false" data-skip-node-update="true">
+                          {% endif %}
+
+                          <div class="facets__inputs-wrapper" ref="showMoreContent">
+                            <ul class="facets__inputs-list list-unstyled" name="Categories">
+                                {% assign index = 0 %}
+                                {% for sub_collection in sub_collections %}
+                                    {% if sub_collection.products_count > 0 %}
+                                        {% assign index = index | plus: 1 %}
+                                        <li data-skip-node-update="true" class="facets__inputs-list-item {% if index > initial_visible_values and render_show_more %}hidden{% endif %}" {% if index > initial_visible_values and render_show_more %}ref="showMoreItems[]"{% endif %}>
+                                        <div class="facets__pill-wrapper">
+                                            <a href="{{ sub_collection.url }}" class="facets__label">
+                                            {{ sub_collection.title }}
+                                            </a>
+                                        </div>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                          </div>
+
+                          {% if render_show_more %}
+                            <button
+                              class="show-more__button button-unstyled button-unstyled--with-icon"
+                              ref="showMoreButton"
+                              on:click="/toggle"
+                              aria-expanded="false"
+                              aria-controls="filters-list-template--30350353531222__main-filter-p-m-custom-c2c_ceiling_no_of_arms"
+                            >
+                              <span class="svg-wrapper icon-plus">
+                                {{- 'icon-plus.svg' | inline_asset_content -}}
+                              </span>
+                              <span class="show-more__label show-more__label--more">
+                                {{- 'actions.show_more' | t -}}
+                              </span>
+                              <span class="show-more__label show-more__label--less">
+                                {{- 'actions.show_less' | t -}}
+                              </span>
+                            </button>
+                            </show-more-component>
+                          {% endif %}
+                        </facet-inputs-component>
+                      </floating-panel-component>
+                    </details>
+                  </accordion-custom>
+                {% endif %}
                 {% if block_settings.filter_style == 'horizontal' %}
                   {% liquid
                     assign more_attributes = 'on:click="#filters-drawer/toggle"'
@@ -467,6 +552,92 @@
               %}
 
               <div class="facets__filters-wrapper">
+                {% assign sub_collections = collection.metafields.custom.child_categories.value %}
+                {% assign has_child_products = false %}
+
+                {% for sub_collection in sub_collections %}
+                {% if sub_collection.products_count > 0 %}
+                  {% assign has_child_products = true %}
+                  {% break %}
+                {% endif %}
+                {% endfor %}
+
+                {% if sub_collections != blank and has_child_products %}
+                  <accordion-custom class="facets__item" data-accordion-group="{{ section.id }}">
+                    <details id="Facet-Details-{{ block.id }}" class="facets__panel">
+                      <summary class="facets__summary">
+                        <span class="facets__label">Categories</span>
+                        <div class="facets__status-wrapper">
+                          <facet-status-component class="facets__status" facet-type="list" data-filter-style="vertical">
+                            <span class="hide-when-empty" ref="facetStatus"></span>
+                          </facet-status-component>
+                          <span class="svg-wrapper icon-caret icon-animated">
+                            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M11 5.5L7 9.5L3 5.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                          </span>
+                        </div>
+                      </summary>
+                      <floating-panel-component class="facets__inputs facets__panel-content details-content" style="top: 40px;">
+                        <facet-inputs-component>
+                          {% assign render_show_more = false %}
+                          {% assign initial_visible_values = 10 %}
+                          {% assign sub_collections_with_products = 0 %}
+                          {% for sub_collection in sub_collections %}
+                            {% if sub_collection.products_count > 0 %}
+                              {% assign sub_collections_with_products = sub_collections_with_products | plus: 1 %}
+                            {% endif %}
+                          {% endfor %}
+                          
+                          {% if sub_collections_with_products > initial_visible_values %}
+                            {% assign render_show_more = true %}
+                            <show-more-component class="show-more" data-expanded="false" data-skip-node-update="true">
+                          {% endif %}
+
+                          <div class="facets__inputs-wrapper" ref="showMoreContent">
+                            <ul class="facets__inputs-list list-unstyled" name="Categories">
+                                {% assign index = 0 %}
+                                {% for sub_collection in sub_collections %}
+                                    {% if sub_collection.products_count > 0 %}
+                                        {% assign index = index | plus: 1 %}
+                                        <li data-skip-node-update="true" class="facets__inputs-list-item {% if index > initial_visible_values and render_show_more %}hidden{% endif %}" {% if index > initial_visible_values and render_show_more %}ref="showMoreItems[]"{% endif %}>
+                                        <div class="facets__pill-wrapper">
+                                            <a href="{{ sub_collection.url }}" class="facets__label">
+                                            {{ sub_collection.title }}
+                                            </a>
+                                        </div>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                          </div>
+
+                          {% if render_show_more %}
+                            <button
+                              class="show-more__button button-unstyled button-unstyled--with-icon"
+                              ref="showMoreButton"
+                              on:click="/toggle"
+                              aria-expanded="false"
+                              aria-controls="filters-list-template--30350353531222__main-filter-p-m-custom-c2c_ceiling_no_of_arms"
+                            >
+                              <span class="svg-wrapper icon-plus">
+                                {{- 'icon-plus.svg' | inline_asset_content -}}
+                              </span>
+                              <span class="show-more__label show-more__label--more">
+                                {{- 'actions.show_more' | t -}}
+                              </span>
+                              <span class="show-more__label show-more__label--less">
+                                {{- 'actions.show_less' | t -}}
+                              </span>
+                            </button>
+                            </show-more-component>
+                          {% endif %}
+                        </facet-inputs-component>
+                      </floating-panel-component>
+                    </details>
+                  </accordion-custom>
+                {% endif %}
+
                 {% assign total_active_values = 0 %}
                 {% assign is_active = false %}
 

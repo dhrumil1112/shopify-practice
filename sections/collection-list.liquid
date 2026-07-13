@@ -20,7 +20,7 @@
     render 'contrast-override', background_color: section.settings.background_color, section_id: section.id
   endif
 %}
-
+{%- if section.settings.collection_list != blank -%}
 <div
   class="section-background{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}"
 ></div>
@@ -78,7 +78,7 @@
     test_id: 'collections-list-grid'
   %}
 </div>
-
+{%- endif -%}
 {% schema %}
 {
   "name": "t:names.collection_list",
